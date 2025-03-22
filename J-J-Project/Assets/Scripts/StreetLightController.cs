@@ -1,69 +1,72 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class StreetLightController : MonoBehaviour
 {
-    public Light streetLight;
-    public Light pointLight;
     public Light spotLight;
+    public Light spotLight2;
     public float detectionRadius = 5f;
     public LayerMask detectionLayer;
-
-    public GameObject enemy;
-    public float normalEnemySpeed = 3f;
-    public float alertedEnemySpeed = 6f;
-
-    private EnemyMovement enemyMovement;
+    private bool isOn = false;
 
     private void Start()
     {
-        if (streetLight != null)
+        if(spotLight == null || spotLight2 == null)
         {
-            streetLight.enabled = false;
+            Light[] lights = GetComponentsInChildren<Light>();
+            if (lights.Length >= 2)
+            {
+                spotLight =lights[0];
+                spotLight2 =lights[1];
+            
+            }
+            spotLight.enabled = false;
+            spotLight2.enabled = false;
+        }
+        else
+        {
+            Debug.LogError("Spotlight not assigned in Inspector!");
+            return;
         }
 
-        if (enemy != null)
-        {
-            enemyMovement = enemy.GetComponent<EnemyMovement>();
-        }
-
-        pointLight.enabled = false;
         spotLight.enabled = false;
+        spotLight2.enabled = false;
     }
 
+    
 
     private void Update()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, detectionLayer);
-        bool isDetected = hitColliders.Length > 0;
+        Collider[] hitcolliders = Physics.OverlapSphere(transform.position, detectionRadius, detectionLayer);
+        //bool isDetected = hitcolliders.Length > 0;
 
-        bool playerNearby = false;
-        bool enemyNearby = false;
-
-        pointLight.enabled = isDetected;
-        spotLight.enabled = isDetected;
-
-        foreach (Collider collider in hitColliders)
+        bool isAnyoneNearby = false;
+        foreach (Collider collider in hitcolliders)
         {
-            if (collider.CompareTag("Player"))
+            if (collider.CompareTag("Player") || collider.CompareTag("Enemy"))
             {
-                playerNearby = true;
-            } 
-            if (collider.CompareTag("Enemy"))
-            {
-                enemyNearby = true;
+                isAnyoneNearby = true;
+                break;
             }
 
         }
 
-        streetLight.enabled = playerNearby || enemyNearby;
+        spotLight.enabled = isAnyoneNearby;
 
-        if(enemyMovement != null)
+        if (Input.GetKeyDown(KeyCode.L))
         {
-            enemyMovement.speed = playerNearby ? alertedEnemySpeed : normalEnemySpeed;
+            ToggleLights();
         }
+    }
+
+    void ToggleLights()
+    {
+        isOn = !isOn;
+        spotLight.enabled = isOn;
+        spotLight2.enabled= isOn;
     }
 
     private void OnDrawGizmosSelected()
@@ -71,4 +74,5 @@ public class StreetLightController : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
+
 }

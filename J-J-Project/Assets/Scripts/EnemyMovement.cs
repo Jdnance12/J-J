@@ -7,8 +7,21 @@ public class EnemyMovement : MonoBehaviour
 {
 
     public float speed = 3f;
+    private Vector3 target;
     private NavMeshAgent agent;
     private Transform player;
+    private bool isPatroling = true;
+
+    public void SetTarget(Vector3 newTarget)
+    {
+        target = newTarget;
+        isPatroling = false;
+    }
+
+    public void ResumePatrol()
+    {
+        isPatroling = true;
+    }
 
 
     // Start is called before the first frame update
@@ -26,6 +39,11 @@ public class EnemyMovement : MonoBehaviour
     private void Update()
     {
         agent.speed = speed;
-        agent.SetDestination(player.position);
+        //agent.SetDestination(player.position);
+
+        if (!isPatroling)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+        }
     }
 }
