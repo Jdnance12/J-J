@@ -39,12 +39,44 @@ public class playerController : MonoBehaviour
 
     void Movement()
     {
-        if(!isGrounded)
+
+        //isGrounded = controller.isGrounded;
+        //if (isGrounded && velocity.y < 0)
+        //{
+        //    velocity.y = -2f;
+        //}
+
+        //float mouseScroll = Input.GetAxis("Mouse ScrollWheel");
+        //float horizontal = Input.GetAxisRaw("Horizontal");
+        //float vertical = Input.GetAxisRaw("Vertical");
+
+        //Vector3 moveDirection = transform.right * horizontal + transform.forward * vertical;
+        //moveDirection = moveDirection.normalized;
+
+        //if (mouseScroll != 0)
+        //{
+        //    moveSpeed += mouseScroll * speedStep;
+        //    moveSpeed = Mathf.Clamp(moveSpeed, minSpeed, maxSpeed);
+        //}
+
+        //float currentSpeed = mouseScroll * speedStep;
+        //controller.Move(moveDirection *  currentSpeed * Time.deltaTime);
+
+        //if (moveDirection != Vector3.zero)
+        //{
+        //    Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10);
+
+        //}
+
+        //velocity.y -= gravity * Time.deltaTime;
+        //controller.Move(velocity * Time.deltaTime);
+        if (!isGrounded)
         {
             controller.Move(velocity * Time.deltaTime);
             velocity.y -= gravity * Time.deltaTime;
         }
-        else if(velocity.y < 0) 
+        else if (velocity.y < 0)
         {
             velocity.y = -2f;
         }
