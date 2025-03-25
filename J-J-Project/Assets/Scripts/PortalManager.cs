@@ -10,27 +10,26 @@ public class PortalManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Portal 1"))
+        if (other.CompareTag("Player"))
         {
-            CharacterController cc = GetComponent<CharacterController>();
+            CharacterController controller = other.GetComponent<CharacterController>();
 
-            cc.enabled = false;
-            transform.position = BPos.transform.position;
-            transform.rotation = new Quaternion(transform.rotation.x, BPos.rotation.y, transform.rotation.z, transform.rotation.w);
+            if (controller != null)
+            {
+                controller.enabled = false;
 
-            cc.enabled = true;
-        }
-
-        if (other.CompareTag("Portal 2"))
-        {
-            CharacterController cc = GetComponent<CharacterController>();
-
-            cc.enabled = false;
-            transform.position = BPos.transform.position;
-            transform.rotation = new Quaternion(transform.rotation.x, APos.rotation.y, transform.rotation.z, transform.rotation.w);
-
-            cc.enabled = true;
-
+                if (gameObject.CompareTag("Portal 1"))
+                {
+                    other.transform.position = BPos.position;
+                    other.transform.rotation = BPos.rotation;
+                }
+                else if (gameObject.CompareTag("Portal 2"))
+                {
+                    other.transform.position = APos.position;
+                    other.transform.rotation = APos.rotation;
+                }
+                controller.enabled = true;
+            }
         }
     }
 }
