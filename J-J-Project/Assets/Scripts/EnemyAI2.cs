@@ -50,13 +50,15 @@ public class EnemyAI2 : MonoBehaviour
         yield return new WaitForSeconds(investigationTime);
         alertIcon.SetActive(false);
         isInvestigating = false;
+
+        StopAllCoroutines();
         StartCoroutine(Roam());
 
     }
 
     IEnumerator Roam()
     {
-        while (!isInvestigating)
+        while(!isInvestigating)
         {
             Vector3 randomPoint = startPosition + new Vector3(Random.Range(-roamRadius, roamRadius), 0, Random.Range(-roamRadius, roamRadius));
             NavMeshHit hit;
@@ -64,9 +66,11 @@ public class EnemyAI2 : MonoBehaviour
             {
                 agent.SetDestination(hit.position);
             }
+
+            yield return new WaitForSeconds(Random.Range(3f, 7f));
         }
 
-        yield return new WaitForSeconds(Random.Range(3f, 7f));
+        
     }
 
 
