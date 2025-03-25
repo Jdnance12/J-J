@@ -8,6 +8,8 @@ TagManager:
   - Wall
   - Enemy
   - Key
+  - Portal 1
+  - Portal 2
   layers:
   - Default
   - TransparentFX

@@ -12,7 +12,26 @@ public class StreetAlarm : MonoBehaviour
     public Light spotlight;
     public Light spotlight2;
 
+    public AudioClip alertSound;
+    private AudioSource audioSource;
     private bool isPlayerNear = false;
+
+    private void Start()
+    {
+
+        AudioListener.volume = 1f;
+
+        audioSource = GetComponent<AudioSource>();
+        if(audioSource == null)
+        {
+            Debug.LogWarning("audioSource not found on " + gameObject.name);
+        }
+
+        if (alertSound == null)
+        {
+            Debug.LogWarning("Alert sound is not assigned.");
+        }
+    }
 
     private void Update()
     {
@@ -26,6 +45,14 @@ public class StreetAlarm : MonoBehaviour
         } else
         {
             DeactivateSpotlights();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (audioSource != null && alertSound != null)
+            {
+                audioSource.PlayOneShot(alertSound);
+            }
         }
     }
 
@@ -78,6 +105,17 @@ public class StreetAlarm : MonoBehaviour
             isPlayerNear = true;
             Debug.Log("Player is near, street rotation activated.");
             Debug.Log("Player entered the area, spotlight should activate.");
+
+            ActivateSpotlights();
+
+            if(audioSource != null && alertSound != null)
+            {
+                audioSource.PlayOneShot(alertSound);
+            } else
+            {
+                Debug.LogWarning("AudioSource or AudioClip is missing!");
+            }
+
         }
     }
 
