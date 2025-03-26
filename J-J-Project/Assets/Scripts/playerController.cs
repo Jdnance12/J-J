@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class playerController : MonoBehaviour
 {
@@ -24,6 +27,10 @@ public class playerController : MonoBehaviour
 
     [Header("---- Components ----")]
     [SerializeField] CharacterController controller;
+
+    public GameOverScript GameOverScript;
+    int maxPlatform = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -113,5 +120,10 @@ public class playerController : MonoBehaviour
             Quaternion rot = Quaternion.LookRotation(movement, Vector3.up);
             transform.rotation = rot;
         }
+    }
+
+    public void GameOver()
+    {
+        GameOverScript.SetUp(maxPlatform);
     }
 }
