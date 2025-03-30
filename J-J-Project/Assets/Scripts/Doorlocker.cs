@@ -13,6 +13,7 @@ public class Doorlocker : MonoBehaviour
         if (other.CompareTag("Player") && HasKey)
         {
             OpenDoor();
+            HasKey = false;  
         }
     }
 
